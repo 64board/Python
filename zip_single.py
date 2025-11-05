@@ -57,7 +57,7 @@ def main():
     )
     parser.add_argument("file", help="File to zip")
     parser.add_argument(
-        "-o", "--outdir",
+        "-o", "--out-dir",
         help="Output directory for the ZIP (default: same as input file)",
         default=None,
     )
@@ -67,8 +67,8 @@ def main():
         action="store_true",
     )
     parser.add_argument(
-        "--log-file",
-        help="Path to log file (default: <outdir>\\zip_single.log)",
+        "-l", "--log-file",
+        help="Path to log file (default: <out_dir>/zip_single.log)",
         default=None,
     )
     args = parser.parse_args()
@@ -83,24 +83,24 @@ def main():
 
     base_name = os.path.splitext(os.path.basename(input_path))[0]
 
-    # Resolve outdir
-    outdir = args.outdir if args.outdir else src_dir
+    # Resolve out_dir
+    out_dir = args.out_dir if args.out_dir else src_dir
 
-    if not os.path.isdir(outdir):
+    if not os.path.isdir(out_dir):
         # create it early so logging can write there if default log path is used
-        os.makedirs(outdir, exist_ok=True)
+        os.makedirs(out_dir, exist_ok=True)
 
-    # Default log file sits in outdir unless overridden
-    log_file = args.log_file if args.log_file else os.path.join(outdir, "zip_single.log")
+    # Default log file sits in out_dir unless overridden
+    log_file = args.log_file if args.log_file else os.path.join(out_dir, "zip_single.log")
     setup_logging(args.verbose, log_file)
 
     logging.info(f"Input file: {input_path}")
-    logging.info(f"Output directory: {outdir}")
+    logging.info(f"Output directory: {out_dir}")
     logging.info(f"Log file: {log_file}")
 
     # Zip filename based on original filename.
     zip_file: str = base_name + '.zip'
-    zip_path: str = os.path.join(outdir, zip_file)
+    zip_path: str = os.path.join(out_dir, zip_file)
     logging.info(f"ZIP path: {zip_path}")
 
     try:
